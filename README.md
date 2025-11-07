@@ -11,6 +11,8 @@ branding and theming of Open edX.
 Applications in Open edX are configured by default to include this
 package for branding assets and theming visual style.
 
+# npm i @nekoneko6996/cusc-custom-brand@^1.0.47
+
 To use a custom brand and theme\...
 
 1.  Fork or copy this project. Ensure that it lives in a location
