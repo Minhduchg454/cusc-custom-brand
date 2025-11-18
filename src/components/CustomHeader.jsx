@@ -367,7 +367,7 @@ export default function CustomHeader({
     ];
   }, [authenticatedUser, config]);
 
-  const Brand = (
+  const Brand = () => (
     <a href={`${config?.LMS_BASE_URL}/dashboard`} className="brand d-inline-flex align-center">
       <img
         src={firstLogo}
@@ -385,7 +385,7 @@ export default function CustomHeader({
     </a>
   );
 
-  const OneLogoBrand = (
+  const OneLogoBrand = () => (
     <a href={`${config?.LMS_BASE_URL}/dashboard`} className="brand d-inline-flex align-center">
       <img
         src={`${config?.LMS_BASE_URL}/static/tutor-edx-mytheme/images/logo.png`}
@@ -396,6 +396,7 @@ export default function CustomHeader({
       <span className="brand-title">{config?.SITE_NAME || 'Trang'}</span>
     </a>
   );
+
 
   function Secondary() {
     if (minimal || brandSecond.length === 0) return null;
