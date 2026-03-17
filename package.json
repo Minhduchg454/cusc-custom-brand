@@ -1,6 +1,6 @@
 {
-  "name": "@nekoneko6996/cusc-custom-brand",
-  "version": "1.0.50",
+  "name": "@minhduchg454/cusc-custom-brand",
+  "version": "1.0.0",
   "description": "CUSC custom brand components (Header/Footer) for Open edX MFEs",
   "license": "MIT",
   "type": "module",
@@ -29,20 +29,18 @@
     "react-responsive": "^8 || ^9"
   },
   "devDependencies": {
-    "tsup": "^8.5.0"
+    "tsup": "^8.5.0",
+    "typescript": "^5.0.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NekoNeko6996/cusc-custom-brand"
+    "url": "https://github.com/Minhduchg454/cusc-custom-brand"
   },
   "bugs": {
-    "url": "https://github.com/NekoNeko6996/cusc-custom-brand/issues"
+    "url": "https://github.com/Minhduchg454/cusc-custom-brand/issues"
   },
-  "homepage": "https://github.com/NekoNeko6996/cusc-custom-brand#readme",
-  "dependencies": {
-    "@nekoneko6996/cusc-custom-brand": "^1.0.25"
-  }
+  "homepage": "https://github.com/Minhduchg454/cusc-custom-brand#readme"
 }
