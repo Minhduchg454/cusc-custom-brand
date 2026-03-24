@@ -1,23 +1,32 @@
 // src/components/CustomHeader.jsx
-import React, { useContext, useMemo, useState, useEffect } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { AppContext } from '@edx/frontend-platform/react/index.js';
-import { ensureConfig, getConfig } from '@edx/frontend-platform';
+import React, { useContext, useMemo, useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
+import { AppContext } from "@edx/frontend-platform/react/index.js";
+import { ensureConfig, getConfig } from "@edx/frontend-platform";
 import {
   primaryNav as defaultPrimary,
   secondaryNav as defaultSecondary,
   ctuLogo as ctuLogoPng,
   cuscLogo as cuscLogoPng,
-} from '../brand';
+} from "../brand";
 
 ensureConfig(
-  ['LMS_BASE_URL','LOGIN_URL','LOGOUT_URL','SITE_NAME','ACCOUNT_PROFILE_URL','ACCOUNT_SETTINGS_URL','ORDER_HISTORY_URL'],
-  'CustomHeader',
+  [
+    "LMS_BASE_URL",
+    "LOGIN_URL",
+    "LOGOUT_URL",
+    "SITE_NAME",
+    "ACCOUNT_PROFILE_URL",
+    "ACCOUNT_SETTINGS_URL",
+    "ORDER_HISTORY_URL",
+    "PAYMENT_HISTORY_URL",
+  ],
+  "CustomHeader",
 );
 
 /* ========= HEIGHT constants để offset body ========= */
 const H_DESKTOP = 64; // chiều cao thực tế thanh header desktop
-const H_MOBILE  = 56; // chiều cao thực tế thanh header mobile
+const H_MOBILE = 56; // chiều cao thực tế thanh header mobile
 
 /* ========= BIẾN THEME (chỉnh ở đây) ========= */
 const THEME_CSS_VARS = `
@@ -243,18 +252,48 @@ header.global-header.custom-header .btn-light{ background:#f8fafc; border-color:
 }
 `;
 
-
 /* ===== utils, menus, component … y như bạn đang dùng (không đổi) ===== */
 function InlineIcon({ name, size = 20 }) {
-  const common = { width: size, height: size, viewBox: '0 0 24 24', 'aria-hidden': true };
-  if (name === 'person') return (<svg {...common}><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5a5 5 0 0 0 5 5m0 2c-3.33 0-10 1.34-10 4v2h20v-2c0-2.66-6.67-4-10-4"/></svg>);
-  if (name === 'menu')   return (<svg {...common}><path fill="currentColor" d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2"/></svg>);
-  if (name === 'chevron')return (<svg {...common}><path fill="currentColor" d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6l1.41-1.42Z"/></svg>);
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    "aria-hidden": true,
+  };
+  if (name === "person")
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M12 12a5 5 0 1 0-5-5a5 5 0 0 0 5 5m0 2c-3.33 0-10 1.34-10 4v2h20v-2c0-2.66-6.67-4-10-4"
+        />
+      </svg>
+    );
+  if (name === "menu")
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2"
+        />
+      </svg>
+    );
+  if (name === "chevron")
+    return (
+      <svg {...common}>
+        <path
+          fill="currentColor"
+          d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6l1.41-1.42Z"
+        />
+      </svg>
+    );
   return null;
 }
-function classNames(...xs) { return xs.filter(Boolean).join(' '); }
+function classNames(...xs) {
+  return xs.filter(Boolean).join(" ");
+}
 
-function AvatarOrIcon({ src, size = 28, alt = 'Ảnh đại diện người dùng' }) {
+function AvatarOrIcon({ src, size = 28, alt = "Ảnh đại diện người dùng" }) {
   const [err, setErr] = React.useState(false);
   const showImg = !!src && !err;
 
@@ -265,7 +304,7 @@ function AvatarOrIcon({ src, size = 28, alt = 'Ảnh đại diện người dùn
         alt={alt}
         width={size}
         height={size}
-        style={{ borderRadius: 999, objectFit: 'cover' }}
+        style={{ borderRadius: 999, objectFit: "cover" }}
         onError={() => setErr(true)}
       />
     );
@@ -279,18 +318,30 @@ function MainMenu({ items }) {
     <nav className="main-nav" aria-label="Menu chính">
       <ul className="nav-list">
         {items.map((item) => {
-          if (item.type === 'menu' && Array.isArray(item.items)) {
+          if (item.type === "menu" && Array.isArray(item.items)) {
             const key = `menu-${item.content}`;
             const isOpen = openKey === key;
             return (
-              <li key={key} className={classNames('nav-item','has-dropdown', isOpen && 'open')}>
+              <li
+                key={key}
+                className={classNames(
+                  "nav-item",
+                  "has-dropdown",
+                  isOpen && "open",
+                )}
+              >
                 <button
                   type="button"
                   className="nav-link btn-reset d-inline-flex align-center"
                   aria-haspopup="true"
                   aria-expanded={isOpen}
                   onClick={() => setOpenKey(isOpen ? null : key)}
-                  onBlur={(e) => { if (!e.currentTarget.closest('li').contains(e.relatedTarget)) setOpenKey(null); }}
+                  onBlur={(e) => {
+                    if (
+                      !e.currentTarget.closest("li").contains(e.relatedTarget)
+                    )
+                      setOpenKey(null);
+                  }}
                 >
                   <span>{item.content}</span>
                   <InlineIcon name="chevron" size={18} />
@@ -298,17 +349,28 @@ function MainMenu({ items }) {
                 <ul className="dropdown" role="menu">
                   {item.items.map((sub) => (
                     <li key={sub.href} role="none">
-                      <a className="dropdown-item" role="menuitem" href={sub.href}>{sub.content}</a>
+                      <a
+                        className="dropdown-item"
+                        role="menuitem"
+                        href={sub.href}
+                      >
+                        {sub.content}
+                      </a>
                     </li>
                   ))}
                 </ul>
               </li>
             );
           }
-          const isDiscover = (item.content || item.label || '').toLowerCase().includes('discover');
+          const isDiscover = (item.content || item.label || "")
+            .toLowerCase()
+            .includes("discover");
           return (
             <li key={item.href} className="nav-item">
-              <a className={classNames('nav-link', isDiscover && 'nav-discover')} href={item.href}>
+              <a
+                className={classNames("nav-link", isDiscover && "nav-discover")}
+                href={item.href}
+              >
                 {item.content || item.label}
               </a>
             </li>
@@ -319,12 +381,12 @@ function MainMenu({ items }) {
   );
 }
 
-export default function CustomHeader({ 
-  primaryNav, 
-  secondaryNav, 
-  firstLogo = cuscLogo, 
-  secondLogo = ctuLogo, 
-  userImageUrl, 
+export default function CustomHeader({
+  primaryNav,
+  secondaryNav,
+  firstLogo = cuscLogo,
+  secondLogo = ctuLogo,
+  userImageUrl,
   showLoginButtons = true,
   twoLogo = false,
 }) {
@@ -333,42 +395,58 @@ export default function CustomHeader({
   const [userOpen, setUserOpen] = useState(false);
   const minimal = getConfig().AUTHN_MINIMAL_HEADER;
 
-
-
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isMobile = !isDesktop;
 
-  const brandMain = useMemo(() => primaryNav ?? defaultPrimary ?? [], [primaryNav]);
-  const brandSecond = useMemo(() => secondaryNav ?? defaultSecondary ?? [], [secondaryNav]);
+  const brandMain = useMemo(
+    () => primaryNav ?? defaultPrimary ?? [],
+    [primaryNav],
+  );
+  const brandSecond = useMemo(
+    () => secondaryNav ?? defaultSecondary ?? [],
+    [secondaryNav],
+  );
 
-  const loggedOut = useMemo(() => ([
-    { href: config?.LOGIN_URL, label: 'Đăng Nhập' },  
-    { href: `${config?.LMS_BASE_URL}/register`, label: 'Đăng Ký' },
-  ]), [config]);
+  const loggedOut = useMemo(
+    () => [
+      { href: config?.LOGIN_URL, label: "Đăng Nhập" },
+      { href: `${config?.LMS_BASE_URL}/register`, label: "Đăng Ký" },
+    ],
+    [config],
+  );
 
   useEffect(() => {
     if (mobileOpen) {
       const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      const onEsc = (e) => e.key === 'Escape' && setMobileOpen(false);
-      window.addEventListener('keydown', onEsc);
-      return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onEsc); };
+      document.body.style.overflow = "hidden";
+      const onEsc = (e) => e.key === "Escape" && setMobileOpen(false);
+      window.addEventListener("keydown", onEsc);
+      return () => {
+        document.body.style.overflow = prev;
+        window.removeEventListener("keydown", onEsc);
+      };
     }
   }, [mobileOpen]);
 
   const userMenu = useMemo(() => {
     if (!authenticatedUser) return [];
     return [
-      { href: `${config.LMS_BASE_URL}/dashboard`, label: 'Bảng điều khiển' },
-      { href: `${config.ACCOUNT_PROFILE_URL}/u/${authenticatedUser.username}`, label: 'Hồ sơ' },
-      ...(config.ORDER_HISTORY_URL ? [{ href: config.ORDER_HISTORY_URL, label: 'Lịch sử đơn hàng' }] : []),
-      { href: config.ACCOUNT_SETTINGS_URL, label: 'Cài đặt tài khoản' },
-      { href: config.LOGOUT_URL, label: 'Đăng xuất' },
+      { href: `${config.LMS_BASE_URL}/dashboard`, label: "Bảng điều khiển" },
+      {
+        href: `${config.ACCOUNT_PROFILE_URL}/u/${authenticatedUser.username}`,
+        label: "Hồ sơ",
+      },
+      { href: config.PAYMENT_HISTORY_URL, label: "Lịch sử thanh toán" },
+      { href: config.ACCOUNT_SETTINGS_URL, label: "Cài đặt tài khoản" },
+      { href: config.LOGOUT_URL, label: "Đăng xuất" },
     ];
   }, [authenticatedUser, config]);
 
   const Brand = () => (
-    <a href={`${config?.LMS_BASE_URL}/dashboard`} className="brand d-inline-flex align-center">
+    <a
+      href={`${config?.LMS_BASE_URL}/dashboard`}
+      className="brand d-inline-flex align-center"
+    >
       <img
         src={firstLogo}
         alt="CUSC Logo"
@@ -381,22 +459,24 @@ export default function CustomHeader({
         height={28}
         className="logo logo-ctu"
       />
-      <span className="brand-title">{config?.SITE_NAME || 'Trang'}</span>
+      <span className="brand-title">{config?.SITE_NAME || "Trang"}</span>
     </a>
   );
 
   const OneLogoBrand = () => (
-    <a href={`${config?.LMS_BASE_URL}/dashboard`} className="brand d-inline-flex align-center">
+    <a
+      href={`${config?.LMS_BASE_URL}/dashboard`}
+      className="brand d-inline-flex align-center"
+    >
       <img
         src={`${config?.LMS_BASE_URL}/static/tutor-edx-mytheme/images/logo.png`}
         alt="Web Logo"
         height={28}
         className="logo"
       />
-      <span className="brand-title">{config?.SITE_NAME || 'Trang'}</span>
+      <span className="brand-title">{config?.SITE_NAME || "Trang"}</span>
     </a>
   );
-
 
   function Secondary() {
     if (minimal || brandSecond.length === 0) return null;
@@ -405,7 +485,9 @@ export default function CustomHeader({
         <ul className="nav-list">
           {brandSecond.map((item) => (
             <li key={item.href} className="nav-item">
-              <a className="nav-link" href={item.href}>{item.content || item.label}</a>
+              <a className="nav-link" href={item.href}>
+                {item.content || item.label}
+              </a>
             </li>
           ))}
         </ul>
@@ -424,7 +506,8 @@ export default function CustomHeader({
         authenticatedUser?.profileImageUrl ||
         authenticatedUser?.image_url;
 
-      const displayName = authenticatedUser?.name || authenticatedUser?.username || 'Người dùng';
+      const displayName =
+        authenticatedUser?.name || authenticatedUser?.username || "Người dùng";
       return (
         <div className="user-area">
           <button
@@ -434,7 +517,10 @@ export default function CustomHeader({
             aria-haspopup="true"
             aria-expanded={userOpen}
             onBlur={(e) => {
-              if (!e.currentTarget.closest('.user-area').contains(e.relatedTarget)) setUserOpen(false);
+              if (
+                !e.currentTarget.closest(".user-area").contains(e.relatedTarget)
+              )
+                setUserOpen(false);
             }}
           >
             <AvatarOrIcon src={avatarSrc} size={28} alt={displayName} />
@@ -442,10 +528,15 @@ export default function CustomHeader({
             <InlineIcon name="chevron" size={18} />
           </button>
 
-          <ul className={classNames('dropdown', userOpen && 'show')} role="menu">
+          <ul
+            className={classNames("dropdown", userOpen && "show")}
+            role="menu"
+          >
             {userMenu.map((i) => (
               <li key={i.href} role="none">
-                <a className="dropdown-item" role="menuitem" href={i.href}>{i.label}</a>
+                <a className="dropdown-item" role="menuitem" href={i.href}>
+                  {i.label}
+                </a>
               </li>
             ))}
           </ul>
@@ -457,7 +548,11 @@ export default function CustomHeader({
     return (
       <div className="auth-buttons d-flex gap-2">
         {loggedOut.map((i) => (
-          <a key={i.href} className="btn btn-sm btn-outline-primary" href={i.href}>
+          <a
+            key={i.href}
+            className="btn btn-sm btn-outline-primary"
+            href={i.href}
+          >
             {i.label}
           </a>
         ))}
@@ -469,10 +564,10 @@ export default function CustomHeader({
     <header className="custom-header global-header">
       <div className="bar">
         <div className="d-flex align-center">
-          {twoLogo? <Brand /> : <OneLogoBrand />}
+          {twoLogo ? <Brand /> : <OneLogoBrand />}
           {!minimal && <MainMenu items={brandMain} />}
         </div>
-        <div className="d-flex align-center" style={{ gap: '12px' }}>
+        <div className="d-flex align-center" style={{ gap: "12px" }}>
           <Secondary />
           {showLoginButtons && <UserArea />}
         </div>
@@ -483,14 +578,14 @@ export default function CustomHeader({
   const Mobile = () => (
     <header className="custom-header global-header">
       <div className="bar d-flex align-center justify-between">
-        {twoLogo? <Brand /> : <OneLogoBrand />}
+        {twoLogo ? <Brand /> : <OneLogoBrand />}
         {!minimal && (
           <button
             type="button"
             className="btn-reset p-2"
-            aria-label={mobileOpen ? 'Đóng menu' : 'Mở menu'}
+            aria-label={mobileOpen ? "Đóng menu" : "Mở menu"}
             aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen(v => !v)}
+            onClick={() => setMobileOpen((v) => !v)}
           >
             <InlineIcon name="menu" />
           </button>
@@ -500,12 +595,24 @@ export default function CustomHeader({
       {/* Slide-over menu */}
       {!minimal && mobileOpen && (
         <>
-          <div className="cusc-mobile-overlay" onClick={() => setMobileOpen(false)} />
+          <div
+            className="cusc-mobile-overlay"
+            onClick={() => setMobileOpen(false)}
+          />
 
-          <aside className="cusc-mobile-sheet" role="dialog" aria-modal="true" aria-label="Menu chính">
+          <aside
+            className="cusc-mobile-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu chính"
+          >
             <div className="sheet-head">
               <div className="sheet-title">Menu</div>
-              <button className="sheet-close" onClick={() => setMobileOpen(false)} aria-label="Đóng">
+              <button
+                className="sheet-close"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Đóng"
+              >
                 ✕
               </button>
             </div>
@@ -515,34 +622,59 @@ export default function CustomHeader({
               <div className="group">
                 <div className="group-title">Duyệt xem</div>
                 <nav aria-label="Menu chính (di động)">
-                  {(brandMain || []).filter(i => i.type !== 'menu').map(i => (
-                    <a key={i.href} className="m-item" href={i.href} onClick={() => setMobileOpen(false)}>
-                      <span className="cusc-ic link" aria-hidden="true"></span>
-                      <span>{i.content || i.label}</span>
-                    </a>
-                  ))}
+                  {(brandMain || [])
+                    .filter((i) => i.type !== "menu")
+                    .map((i) => (
+                      <a
+                        key={i.href}
+                        className="m-item"
+                        href={i.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span
+                          className="cusc-ic link"
+                          aria-hidden="true"
+                        ></span>
+                        <span>{i.content || i.label}</span>
+                      </a>
+                    ))}
                 </nav>
               </div>
 
               {/* Primary groups (dropdown) */}
-              {(brandMain || []).filter(i => i.type === 'menu').map(menu => (
-                <div key={menu.content} className="group">
-                  <div className="group-title">{menu.content}</div>
-                  {(menu.items || []).map(sub => (
-                    <a key={sub.href} className="m-item" href={sub.href} onClick={() => setMobileOpen(false)}>
-                      <span className="cusc-ic link" aria-hidden="true"></span>
-                      <span>{sub.content}</span>
-                    </a>
-                  ))}
-                </div>
-              ))}
+              {(brandMain || [])
+                .filter((i) => i.type === "menu")
+                .map((menu) => (
+                  <div key={menu.content} className="group">
+                    <div className="group-title">{menu.content}</div>
+                    {(menu.items || []).map((sub) => (
+                      <a
+                        key={sub.href}
+                        className="m-item"
+                        href={sub.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span
+                          className="cusc-ic link"
+                          aria-hidden="true"
+                        ></span>
+                        <span>{sub.content}</span>
+                      </a>
+                    ))}
+                  </div>
+                ))}
 
               {/* Secondary */}
               {brandSecond.length > 0 && (
                 <div className="group">
                   <div className="group-title">Khác</div>
-                  {brandSecond.map(i => (
-                    <a key={i.href} className="m-item" href={i.href} onClick={() => setMobileOpen(false)}>
+                  {brandSecond.map((i) => (
+                    <a
+                      key={i.href}
+                      className="m-item"
+                      href={i.href}
+                      onClick={() => setMobileOpen(false)}
+                    >
                       <span className="cusc-ic link" aria-hidden="true"></span>
                       <span>{i.content || i.label}</span>
                     </a>
@@ -551,17 +683,31 @@ export default function CustomHeader({
               )}
 
               {/* User/Auth */}
-              <div className="group" style={{marginTop: 12}}>
+              <div className="group" style={{ marginTop: 12 }}>
                 {authenticatedUser ? (
                   <>
-                    {userMenu.map(i => (
-                      <a key={i.href} className="m-btn" href={i.href} onClick={() => setMobileOpen(false)}>{i.label}</a>
+                    {userMenu.map((i) => (
+                      <a
+                        key={i.href}
+                        className="m-btn"
+                        href={i.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {i.label}
+                      </a>
                     ))}
                   </>
                 ) : (
                   <>
-                    {loggedOut.map(i => (
-                      <a key={i.href} className="m-btn" href={i.href} onClick={() => setMobileOpen(false)}>{i.label}</a>
+                    {loggedOut.map((i) => (
+                      <a
+                        key={i.href}
+                        className="m-btn"
+                        href={i.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {i.label}
+                      </a>
                     ))}
                   </>
                 )}
