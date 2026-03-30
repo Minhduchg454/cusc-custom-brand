@@ -1,6 +1,6 @@
 {
   "name": "@minhduchg454/cusc-custom-brand",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "CUSC custom brand components (Header/Footer) for Open edX MFEs",
   "license": "MIT",
   "type": "module",
