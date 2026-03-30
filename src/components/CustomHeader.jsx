@@ -436,7 +436,10 @@ export default function CustomHeader({
         href: `${config.ACCOUNT_PROFILE_URL}/u/${authenticatedUser.username}`,
         label: "Hồ sơ",
       },
-      { href: config.PAYMENT_HISTORY_URL, label: "Lịch sử thanh toán" },
+      {
+        href: config.PAYMENT_HISTORY_URL,
+        label: "Lịch sử mua hàng",
+      },
       { href: config.ACCOUNT_SETTINGS_URL, label: "Cài đặt tài khoản" },
       { href: config.LOGOUT_URL, label: "Đăng xuất" },
     ];
